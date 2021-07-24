@@ -17,6 +17,7 @@
     "grunt": "^1.4.1",
     "grunt-contrib-jshint": "^3.0.0",
     "grunt-exec": "^3.0.0",
-    "mocha": "^9.0.2"
+    "mocha": "^9.0.2",
+    "nodemon": "^2.0.12"
   }
 }
