@@ -1,6 +1,7 @@
 var fortune = require("./lib/fortune");
 var express = require("express");
 var formidable = require("formidable");
+var credentials = require("./credentials.js");
 
 var app = express();
 
@@ -19,6 +20,7 @@ app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 
 app.set("port", process.env.PORT || 3000);
+app.use(require("cookie-parser")(credentials.cookieSecret));
 app.use(require("body-parser")());
 app.use(function (req, res, next) {
   res.locals.showTests =
@@ -32,6 +34,7 @@ app.get("/", function (req, res) {
   res.render("home");
 });
 app.get("/about", function (req, res) {
+  res.cookie("monster", "nom nom");
   res.render("about", { fortune: fortune.getFortune() });
 });
 
