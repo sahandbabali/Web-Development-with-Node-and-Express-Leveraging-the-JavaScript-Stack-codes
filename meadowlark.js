@@ -19,6 +19,21 @@ var handlebars = require("express3-handlebars").create({
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 
+switch (app.get("env")) {
+  case "development":
+    // compact, colorful dev logging
+    app.use(require("morgan")("dev"));
+    break;
+  case "production":
+    // module 'express-logger' supports daily log rotation
+    app.use(
+      require("express-logger")({
+        path: __dirname + "/log/requests.log",
+      })
+    );
+    break;
+}
+
 app.set("port", process.env.PORT || 3000);
 app.use(require("cookie-parser")(credentials.cookieSecret));
 app.use(require("body-parser")());
@@ -93,8 +108,12 @@ app.use(function (err, req, res, next) {
 
 app.listen(app.get("port"), function () {
   console.log(
-    "Express started on http://localhost:" +
-      app.get("port") +
-      "; press Ctrl-C to terminate."
+    console.log(
+      "Express started in " +
+        app.get("env") +
+        " mode on http://localhost:" +
+        app.get("port") +
+        "; press Ctrl-C to terminate."
+    )
   );
 });
